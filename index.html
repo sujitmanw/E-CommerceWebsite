@@ -13,40 +13,64 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
 </head>
 <body>
+
+  <!-- HEADER -->
   <div id="header-section"></div>
+
+  <!-- SLIDER -->
   <div id="slider-section"></div>
+
+  <!-- CONTENT -->
   <div id="content-section"></div>
+
+  <!-- FOOTER -->
   <div id="footer-section"></div>
 
-  <script>
-    function loadSection(file, elementId) {
-      fetch(file)
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById(elementId).innerHTML = data;
-        })
-        .catch(err => console.error('Error loading ' + file, err));
-    }
-
-    loadSection('header.html', 'header-section');
-    loadSection('slider.html', 'slider-section');
-    loadSection('content.html', 'content-section');
-    loadSection('footer.html', 'footer-section');
-  </script>
-
+  <!-- Slick JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+
   <script>
-    setTimeout(function() {
-      $('#containerSlider').slick({
-        dots: true,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 1500,
+    // ✅ STEP 1: Load Header
+    fetch('header.html')
+      .then(r => r.text())
+      .then(d => {
+        document.getElementById('header-section').innerHTML = d;
       });
-    }, 500);
+
+    // ✅ STEP 2: Load Slider, then init Slick
+    fetch('slider.html')
+      .then(r => r.text())
+      .then(d => {
+        document.getElementById('slider-section').innerHTML = d;
+        setTimeout(() => {
+          $('#containerSlider').slick({
+            dots: true,
+            infinite: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 1500,
+          });
+        }, 300);
+      });
+
+    // ✅ STEP 3: Load Content, then load content.js
+    fetch('content.html')
+      .then(r => r.text())
+      .then(d => {
+        document.getElementById('content-section').innerHTML = d;
+        let script = document.createElement('script');
+        script.src = 'content.js';
+        document.body.appendChild(script);
+      });
+
+    // ✅ STEP 4: Load Footer
+    fetch('footer.html')
+      .then(r => r.text())
+      .then(d => {
+        document.getElementById('footer-section').innerHTML = d;
+      });
   </script>
-  <script src="content.js"></script>
+
 </body>
 </html>
